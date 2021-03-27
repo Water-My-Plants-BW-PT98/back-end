@@ -8,12 +8,17 @@ async function addPlant(newPlant) {
 	return findById(id)
 }
 
-function updatePlant(plant, id) {
-   return db("plants").update(plant).where("id", id)
+async function updatePlant(plant, id) {
+
+   let updated = await db("plants").update(plant).where("id", id)
+   if(updated){
+      updated = findById(id)
+   }
+   return updated
 }
 
-function deletePlant(id) {
-   return db("plants").where("id",id).del()
+async function deletePlant(id) {
+   return await db("plants").where("id",id).del()
 }
 
 function findById(id){

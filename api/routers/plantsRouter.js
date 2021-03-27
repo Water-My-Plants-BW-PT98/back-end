@@ -47,7 +47,7 @@ router.put("/plants/:id", restrict, async (req,res,next)=> {
       }
 
       const editedPlant = await updatePlant( updated, plantToUpdate.id )
-      res.json(editedPlant)
+      res.status(200).json(editedPlant)
 
    }catch(err){
       next(err)
@@ -67,7 +67,7 @@ router.delete("/plants/:id", restrict, async (req,res,next)=> {
          res.status(404).json({ message: "Could not find plant with given id" });
       }
       const deletedPlant = await deletePlant( plantToDelete.id )
-      res.json(deletedPlant)
+      res.status(200).json(deletedPlant)
 
    }catch(err){
       next(err)
