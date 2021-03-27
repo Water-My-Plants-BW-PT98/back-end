@@ -1,25 +1,37 @@
 const db = require("../data/db-config")
 
 
+// FOR TESTING
+function getUsers() {
+   return db("users").select("*")
+}
+
 async function add(newUser) {
-	const [user_id] = await db("users").insert(newUser)
-	return findById(user_id)
+   console.log(newUser)
+	const [id] = await db("users").insert(newUser,"id")
+	return findById(id)
 }
 
 function findById(id) {
    return db("users")
-   .where("user_id",id)
-   .select("user_id","username","password")
+   .where("id",id)
+   .select("id","username","password")
 }
 
 function findByUserName(username) {
    return db("users")
       .where("username",username)
-      .first("user_id","username","password")
+      .first("id","username","password")
+}
+
+function editUserInfo(userInfo, id){
+   return db("users").update(userInfo).where("id", id)
 }
 
 module.exports = {
+   getUsers,
    add,
    findById,
-   findByUserName
+   findByUserName,
+   editUserInfo
 }
