@@ -1,5 +1,8 @@
 const db = require("../data/db-config")
 
+async function getPlants(){
+   return db("plants")
+}
 
 async function addPlant(newPlant) {
    console.log(newPlant)
@@ -43,6 +46,7 @@ function findById(id){
 // }
 
 module.exports = {
+   getPlants,
    addPlant,
    findById,
    updatePlant,
