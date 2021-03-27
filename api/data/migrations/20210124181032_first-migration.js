@@ -13,27 +13,29 @@ exports.up = async (knex) => {
       users.string('species', 200).notNullable()
       users.string('h2o_frequency', 200).notNullable()
   })
-  await knex.schema.createTable("users_plants", (table) => {
-   table
-    .integer("user_id")
-    .references("id")
-    .inTable("users")
-    .onDelete("CASCADE") // DELETES 
-    .onUpdate("CASCADE") // UPDATES REFERENCES
-    .notNull()
-   table
-    .integer("plant_id")
-    .references("id")
-    .inTable("plants")
-    .onDelete("CASCADE") // DELETES 
-    .onUpdate("CASCADE") // UPDATES REFERENCES
-    .notNull()
-   table.primary(['user_id', 'plant_id'])
-  })
+//   NOT USING==================================================
+//   await knex.schema.createTable("users_plants", (table) => {
+//    table
+//     .integer("user_id")
+//     .references("id")
+//     .inTable("users")
+//     .onDelete("CASCADE") // DELETES 
+//     .onUpdate("CASCADE") // UPDATES REFERENCES
+//     .notNull()
+//    table
+//     .integer("plant_id")
+//     .references("id")
+//     .inTable("plants")
+//     .onDelete("CASCADE") // DELETES 
+//     .onUpdate("CASCADE") // UPDATES REFERENCES
+//     .notNull()
+//    table.primary(['user_id', 'plant_id'])
+//   })
+//   ===========================================================
 }
 
 exports.down = async (knex) => {
-  await knex.schema.dropTableIfExists('users_plants')
+  //await knex.schema.dropTableIfExists('users_plants')
   await knex.schema.dropTableIfExists('plants')
   await knex.schema.dropTableIfExists('users')
 }

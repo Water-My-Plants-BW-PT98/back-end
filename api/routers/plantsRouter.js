@@ -1,20 +1,20 @@
 const express = require("express")
 const { 
+   getPlants,
    addPlant, 
    deletePlant,
    updatePlant,
-   findById, 
-   findPlantsByUserId  } = require("../models/plants")
+   findById    } = require("../models/plants")
 
 const { restrict } = require('../middleware/restricted')
 
 const router = express.Router()
 
-// GET ALL PLANTS BY USER ID
-router.get("/plants/:user_id", restrict, async (req, res, next) => {
+// GET LIST OF PLANTS
+router.get("/plants", restrict, async (req, res, next) => {
    
 	try {
-		const plantsFromDB = await findPlantsByUserId(req.params.user_id)
+		const plantsFromDB = await getPlants()
 
 		res.json(plantsFromDB)
 	} catch(err) {
@@ -26,7 +26,7 @@ router.get("/plants/:user_id", restrict, async (req, res, next) => {
 router.post("/plants", restrict, async (req,res,next)=> {
 
    try{
-      const returnedPlant = await addPlant(req.body, req.token.id)
+      const returnedPlant = await addPlant(req.body)
       res.json(returnedPlant)
    }catch(err){
       next(err)
@@ -76,3 +76,27 @@ router.delete("/plants/:id", restrict, async (req,res,next)=> {
 })
 
 module.exports = router
+
+
+/* legacy seed data for user/plant join table================================
+
+exports.seed = async function(knex) {
+   await knex('users_plants').insert([
+     { user_id: 1, plant_id: 1 },
+     { user_id: 1, plant_id: 2 },
+     { user_id: 1, plant_id: 3 },
+     { user_id: 1, plant_id: 4 },
+     { user_id: 1, plant_id: 5 },
+     { user_id: 2, plant_id: 2 },
+     { user_id: 2, plant_id: 4 },
+     { user_id: 2, plant_id: 6 },
+     { user_id: 2, plant_id: 8 },
+     { user_id: 3, plant_id: 1 },
+     { user_id: 3, plant_id: 3 },
+     { user_id: 3, plant_id: 5 },
+     { user_id: 3, plant_id: 6 },
+     { user_id: 3, plant_id: 8 },
+   ]);
+};
+
+==============================================================================*/
