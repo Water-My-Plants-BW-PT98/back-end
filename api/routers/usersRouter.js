@@ -34,13 +34,18 @@ router.post('/register', async (req, res, next) => {
          return res.status(409).json({ message: "username taken" })
       }
 
-      const newUser = await add({
+      let newUser = await add({
 			username: req.body.username,
 			password: await bcrypt.hash(req.body.password, 12),
          phone_number: req.body.phone_number
 		})
 
-		res.status(201).json(newUser)
+      // jwt.sign( payload, secretOrPrivateKey, [options,callback])
+      const token = jwt.sign({ id: newUser.id, username: newUser.username}, process.env.JWT_SECRET )
+
+      const returnNewUser = { ...newUser, token }
+
+		res.status(201).json(returnNewUser)
 
    }catch(err){
       next(err)
@@ -49,14 +54,14 @@ router.post('/register', async (req, res, next) => {
 
 router.post('/login', async (req, res, next) => {
 
-  try{
+   try{
       // NOT ALL REQUIRED FIELDS
       if( !req.body.username || !req.body.password ) {
          return res.status(401).json({message:"username and password required"})
       }
       // USERNAME NOT FOUND
       const user = await findByUserName(req.body.username)
-		
+	
 		if (!user) {
 			return res.status(401).json({ message: "invalid u credentials" })
 		}
@@ -71,10 +76,11 @@ router.post('/login', async (req, res, next) => {
       // jwt.sign( payload, secretOrPrivateKey, [options,callback])
       const token = jwt.sign({ id: user.id, username: user.username}, process.env.JWT_SECRET )
 
-      res.json({
+      const loginObject = {
          username: user.username, 
          token: token  
-		})
+		}
+      res.status(200).json(loginObject)
      
   }catch(err){
      next(err)

@@ -12,7 +12,7 @@ const router = express.Router()
 
 // GET LIST OF PLANTS
 router.get("/plants", restrict, async (req, res, next) => {
-   
+   console.log("called")
 	try {
 		const plantsFromDB = await getPlants()
 
@@ -43,7 +43,7 @@ router.put("/plants/:id", restrict, async (req,res,next)=> {
       const [plantToUpdate] = await findById(id)
 
       if(!plantToUpdate){
-         res.status(404).json({ message: "Could not find plant with given id" });
+         return res.status(404).json({ message: "Could not find plant with given id" });
       }
 
       const editedPlant = await updatePlant( updated, plantToUpdate.id )
@@ -64,7 +64,7 @@ router.delete("/plants/:id", restrict, async (req,res,next)=> {
       const [plantToDelete] = await findById(id)
 
       if(!plantToDelete){
-         res.status(404).json({ message: "Could not find plant with given id" });
+         return res.status(404).json({ message: "Could not find plant with given id" });
       }
       const deletedPlant = await deletePlant( plantToDelete.id )
       res.status(200).json(deletedPlant)
