@@ -34,16 +34,15 @@ router.post('/register', async (req, res, next) => {
          return res.status(409).json({ message: "username taken" })
       }
 
-      let newUser = await add({
+      let [newUser] = await add({
 			username: req.body.username,
 			password: await bcrypt.hash(req.body.password, 12),
          phone_number: req.body.phone_number
 		})
-
       // jwt.sign( payload, secretOrPrivateKey, [options,callback])
       const token = jwt.sign({ id: newUser.id, username: newUser.username}, process.env.JWT_SECRET )
 
-      const returnNewUser = { ...newUser, token }
+      const returnNewUser =  { id: newUser.id, username: newUser.username, token } 
 
 		res.status(201).json(returnNewUser)
 
